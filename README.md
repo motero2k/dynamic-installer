@@ -1,4 +1,4 @@
-```markdown
+
 # Dynamic Installer
 
 [![npm version](https://img.shields.io/npm/v/dynamic-installer.svg)](https://www.npmjs.com/package/dynamic-installer)
@@ -106,4 +106,3 @@ Returns: A Promise that resolves to an object with `success` (Boolean) and `deta
 ## License
 
 Licensed under the MIT License.
-```
