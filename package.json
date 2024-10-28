@@ -1,6 +1,6 @@
 {
   "name": "dynamic-installer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -15,8 +15,7 @@
     "mocha": "^10.7.3",
     "sinon": "^19.0.2"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "files": [
     "!test"
   ]
