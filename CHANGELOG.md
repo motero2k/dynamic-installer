@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 - Planned future work will be displayed here.
 
-## [1.1.0] - 2024-11-09
+## [1.1.1] - 2024-11-10
 - **CommonJS Support**: Added support for both CommonJS and ECMAScript Module (ESM) formats, enhancing compatibility.
+
+## [1.1.0] - 2024-11-09
+- **Deprecated**: This version was released with incorrect files and does not function as intended.
 
 ## [1.0.1] - 2024-10-28
 ### Fixed
@@ -20,7 +23,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/motero2k/dynamic-installer/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/motero2k/dynamic-installer/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/motero2k/dynamic-installer/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/motero2k/dynamic-installer/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/motero2k/dynamic-installer/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/motero2k/dynamic-installer/releases/tag/v1.0.0

@@ -33,6 +33,10 @@
   },
   "dependencies": {},
   "files": [
+    "src",
+    "dist",
+    "CHANGELOG.md",
+    "README.md",
     "!test"
   ]
 }
