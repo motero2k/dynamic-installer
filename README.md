@@ -1,30 +1,21 @@
-
 # Dynamic Installer
 
 [![npm version](https://img.shields.io/npm/v/dynamic-installer.svg)](https://www.npmjs.com/package/dynamic-installer)
 [![License](https://img.shields.io/npm/l/dynamic-installer.svg)](https://www.npmjs.com/package/dynamic-installer)
 
-**Dynamic Installer** is a flexible, lightweight library for installing npm dependencies on the fly with custom options. Perfect for secure development environments where you might want to install libraries without altering the `package.json` (using options like `--no-save`) or to apply specific options to each dependency dynamically.
+**Dynamic Installer** is a library that allows you to **programmatically install npm dependencies** through code. It is ideal for **secure development environments**, enabling you to install dependencies using code instead of running `npm install` directly in the shell.
 
 ## Security Warning ⚠️
 
 > **Warning**: This utility injects commands directly into the shell and is designed for secure, controlled development environments only. Avoid using it in production or in any exposed context, as it could be vulnerable to command injection.
 
 ## Features
+> Refer to the [**CHANGELOG**](CHANGELOG.md) for updates and changes.
 
-- Install dependencies dynamically with global or dependency-specific options.
-- All npm `install` options are supported, as they are passed as strings directly to the npm command.
-- Supports usage of options like `--no-save` to avoid modifying the `package.json`.
-- Handles installation asynchronously, with results available via `await` or `.then()` for flexibility.
-
-## Supported Options
-
-All options available to the npm `install` command can be used with Dynamic Installer, including:
-
-- `--save-dev`, `--save-optional`, `--no-save`, `--global`: Control how dependencies are stored.
-- `--legacy-peer-deps`, `--force`: Manage dependency compatibility.
-  
-You can find the complete list of options in the [npm install documentation](https://docs.npmjs.com/cli/v9/commands/npm-install).
+- **Programmatic npm installations**: Control installation options programmatically.
+- **Global or dependency-specific options**: Pass global options like `--no-save` that apply to all libraries, or specify options for each individual dependency.
+- **CommonJS and ESM support**: Compatible with both module systems.
+- **Verbose option**: Enable detailed logging of the installation process.
 
 ## Installation
 
@@ -35,18 +26,14 @@ npm install dynamic-installer
 ```
 
 ## Usage
-
-Import the library's `installDependencies` function to start using it.
+Import the library's `installDependencies` function to start using it:
 
 ```javascript
 import { installDependencies } from 'dynamic-installer';
 ```
 
-### Basic Usage
 
-You can use `installDependencies` by passing a configuration object with `globalOptions` and an array of `dependencies`. Each dependency can have its own specific options, and you can control if global options are overridden or combined.
-
-#### Example
+The `installDependencies` function accepts a configuration object containing global options and a list of dependencies with specific options.
 
 ```javascript
 const options = {
@@ -77,32 +64,45 @@ installDependencies(options)
     });
 ```
 
-#### Example Explanation
+### Example Explanation
 
-- `globalOptions` is applied by default to all dependencies unless overridden.
-- `eslint` installs with its own `--global` option, ignoring the global option due to `override: true`.
-- `lodash` combines its specific option `--no-save` with the global `--save-dev` option since `override` is `false`.
-- `mocha` uses only the global option `--save-dev` as no specific options are defined.
+- **`globalOptions`** are applied to all dependencies by default, unless explicitly overridden.
+- **`eslint`** installs using its own `--global` option and ignores `globalOptions`.
+- **`lodash`** combines `--no-save` with the global option `--save-dev` since `override` is set to `false`.
+- **`mocha`** defaults to using only the `globalOptions`.
 
 ### Output
 
-The promise resolves to an object with:
-- `success`: Boolean indicating if all installations were successful.
-- `details`: Array with individual statuses and messages for each dependency.
+The function returns a Promise resolving to an object with:
+- **`success`**: Boolean indicating if all installations were successful.
+- **`details`**: Array containing individual installation results for each dependency.
+- **`logs`**: String with detailed logs of the installation process.
 
 ## API
 
 ### `installDependencies(options)`
 
-- **`options`** (Object): Configuration object containing:
-  - **`globalOptions`** (String): Global options applied to all dependencies unless overridden.
-  - **`dependencies`** (Array of Objects): Each object can have:
-    - **`name`** (String): Name of the dependency (required).
+- **`options`** (Object): A configuration object containing:
+  - **`globalOptions`** (String): Options applied globally to all dependencies.
+  - **`dependencies`** (Array of Objects): List of dependencies, each with:
+    - **`name`** (String): Dependency name (required).
     - **`options`** (String): Specific options for this dependency (optional).
-    - **`override`** (Boolean): Whether to override `globalOptions`. Defaults to `true`.
+    - **`override`** (Boolean): Set to `true` to use only dependency-specific options, ignoring `globalOptions`. Defaults to `false`.
 
-Returns: A Promise that resolves to an object with `success` (Boolean) and `details` (Array) on completion.
+Returns: A Promise resolving to an object with `success` and `details`.
+
+## Supported Options
+
+All npm `install` options are supported, including:
+- `--save-dev`, `--save-optional`, `--no-save`, `--global`: Control how dependencies are stored.
+- `--legacy-peer-deps`, `--force`: Manage compatibility and dependency issues.
+
+Refer to the [npm install documentation](https://docs.npmjs.com/cli/v9/commands/npm-install) for a complete list of options.
 
 ## License
 
 Licensed under the MIT License.
+
+## Contact
+
+email: [Manuel Otero](mailto:motero2k@outlook.com)

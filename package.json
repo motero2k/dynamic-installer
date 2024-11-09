@@ -16,7 +16,13 @@
   },
   "author": "Manuel Otero",
   "license": "MIT",
-  "description": "A dynamic installer for managing dependencies with flexible options for secure development environments.",
+  "description": "Allows installing dependencies dynamically through code instead of using npm install in the terminal",
+  "keywords": [
+    "dynamic",
+    "installer",
+    "dependencies",
+    "npm-install"
+  ],
   "devDependencies": {
     "chai": "^5.1.2",
     "mocha": "^10.7.3",
