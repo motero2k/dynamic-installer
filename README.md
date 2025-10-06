@@ -16,6 +16,8 @@
 - **Global or dependency-specific options**: Pass global options like `--no-save` that apply to all libraries, or specify options for each individual dependency.
 - **CommonJS and ESM support**: Compatible with both module systems.
 - **Verbose option**: Enable detailed logging of the installation process.
+- **TypeScript support**: Written in TypeScript with full type definitions included.
+- **Input validation**: Protects against command injection attacks.
 
 ## Installation
 
@@ -30,6 +32,24 @@ Import the library's `installDependencies` function to start using it:
 
 ```javascript
 import { installDependencies } from 'dynamic-installer';
+```
+
+### TypeScript Support
+
+The library is written in TypeScript and includes full type definitions:
+
+```typescript
+import { installDependencies, type InstallOptions, type InstallationResult } from 'dynamic-installer';
+
+const options: InstallOptions = {
+  globalOptions: '--save-dev',
+  dependencies: [
+    { name: 'lodash' }
+  ],
+  verbose: true
+};
+
+const result: InstallationResult = await installDependencies(options);
 ```
 
 
