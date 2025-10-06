@@ -1,17 +1,25 @@
 {
   "name": "dynamic-installer",
-  "version": "1.1.1",
-  "main": "src/index.js",
+  "version": "1.1.2-alpha.1",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "mocha test/*.js",
-    "build": "babel src -d dist"
+    "build": "npm run build:esm && npm run build:cjs && npm run build:cjs-package",
+    "build:esm": "tsc",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:cjs-package": "echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build"
   },
   "exports": {
     ".": {
-      "import": "./src/index.js",
-      "require": "./dist/index.js"
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     }
   },
   "author": "Manuel Otero",
@@ -24,19 +32,14 @@
     "npm-install"
   ],
   "devDependencies": {
-    "chai": "^5.1.2",
-    "mocha": "^10.7.3",
-    "sinon": "^19.0.2",
-    "@babel/cli": "^7.20.0",
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0"
+    "@types/node": "^24.7.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   },
   "dependencies": {},
   "files": [
-    "src",
     "dist",
     "CHANGELOG.md",
-    "README.md",
-    "!test"
+    "README.md"
   ]
 }
