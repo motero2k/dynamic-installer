@@ -42,13 +42,10 @@ function executeCommand(command, verbose, logs) {
   return new Promise(function (resolve) {
     (0, _child_process.exec)(command, function (error, stdout, stderr) {
       logs = logMessage("command: ".concat(command), verbose, logs);
+
+      // Rely primarily on error object from Node.js for error detection
       var success = !error;
-      var message = stdout || stderr || error.message;
-      if (stderr && stderr.toLowerCase().includes('err!')) {
-        success = false;
-      } else if (stderr && !stderr.toLowerCase().includes('warn')) {
-        success = false;
-      }
+      var message = error ? error.message : stdout || stderr;
       logs = logMessage("stdout: ".concat(stdout), verbose, logs);
       logs = logMessage("stderr: ".concat(stderr), verbose, logs);
       logs = logMessage("error: ".concat(error), verbose, logs);
@@ -63,11 +60,24 @@ function executeCommand(command, verbose, logs) {
 }
 
 /**
+ * Validates and sanitizes a dependency name to prevent command injection.
+ * 
+ * @param {string} name - The dependency name to validate.
+ * @returns {boolean} - True if the name is valid, false otherwise.
+ */
+function isValidDependencyName(name) {
+  // Allow alphanumeric, hyphens, underscores, dots, slashes (for scoped packages), and @
+  var validNamePattern = /^[@a-zA-Z0-9._/-]+$/;
+  return validNamePattern.test(name);
+}
+
+/**
  * Installs a list of npm dependencies with specified global and individual options.
  * 
  * @param {Object} options - The configuration options for the installation process.
  * @param {string} options.globalOptions - Global options to apply to all dependencies unless overridden.
  * @param {Array<{name: string, options?: string, override?: boolean}>} options.dependencies - An array of dependencies, each with a name, optional specific options, and an override flag.
+ * @param {boolean} options.verbose - Whether to log messages to the console. Defaults to true.
  * @returns {Promise<{success: boolean, details: Array<{name: string, success: boolean, message: string}>, logs: string}>} - A promise that resolves to an object with the overall success status, details for each dependency installation, and the updated log string.
  */
 function installDependencies(_x) {
@@ -75,11 +85,11 @@ function installDependencies(_x) {
 }
 function _installDependencies() {
   _installDependencies = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(options) {
-    var dependencies, globalOptions, commandBase, logs, results, _iterator, _step, dep, name, _dep$override, override, specificOptions, finalOptions, depCommand, result, overallSuccess;
+    var dependencies, globalOptions, _options$verbose, verbose, commandBase, logs, results, _iterator, _step, dep, name, _dep$override, override, specificOptions, errorMessage, finalOptions, depCommand, result, overallSuccess;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          dependencies = options.dependencies, globalOptions = options.globalOptions;
+          dependencies = options.dependencies, globalOptions = options.globalOptions, _options$verbose = options.verbose, verbose = _options$verbose === void 0 ? true : _options$verbose;
           commandBase = 'npm install';
           logs = '';
           results = []; // Process each dependency
@@ -88,17 +98,31 @@ function _installDependencies() {
           _iterator.s();
         case 7:
           if ((_step = _iterator.n()).done) {
-            _context.next = 20;
+            _context.next = 25;
             break;
           }
           dep = _step.value;
-          name = dep.name, _dep$override = dep.override, override = _dep$override === void 0 ? true : _dep$override;
-          specificOptions = dep.options || ''; // Determine final options based on override flag
-          finalOptions = override ? specificOptions : "".concat(globalOptions, " ").concat(specificOptions);
+          name = dep.name, _dep$override = dep.override, override = _dep$override === void 0 ? false : _dep$override;
+          specificOptions = dep.options || ''; // Validate dependency name to prevent command injection
+          if (isValidDependencyName(name)) {
+            _context.next = 16;
+            break;
+          }
+          errorMessage = "Invalid dependency name: ".concat(name);
+          logs = logMessage(errorMessage, verbose, logs);
+          results.push({
+            name: name,
+            success: false,
+            message: errorMessage
+          });
+          return _context.abrupt("continue", 23);
+        case 16:
+          // Determine final options based on override flag
+          finalOptions = override ? specificOptions : "".concat(globalOptions, " ").concat(specificOptions).trim();
           depCommand = "".concat(commandBase, " ").concat(name, " ").concat(finalOptions).trim(); // Run command and capture result
-          _context.next = 15;
-          return executeCommand(depCommand, true, logs);
-        case 15:
+          _context.next = 20;
+          return executeCommand(depCommand, verbose, logs);
+        case 20:
           result = _context.sent;
           logs = result.logs;
           results.push({
@@ -106,21 +130,21 @@ function _installDependencies() {
             success: result.success,
             message: result.message
           });
-        case 18:
+        case 23:
           _context.next = 7;
           break;
-        case 20:
-          _context.next = 25;
+        case 25:
+          _context.next = 30;
           break;
-        case 22:
-          _context.prev = 22;
+        case 27:
+          _context.prev = 27;
           _context.t0 = _context["catch"](5);
           _iterator.e(_context.t0);
-        case 25:
-          _context.prev = 25;
+        case 30:
+          _context.prev = 30;
           _iterator.f();
-          return _context.finish(25);
-        case 28:
+          return _context.finish(30);
+        case 33:
           // Determine overall success status
           overallSuccess = results.every(function (result) {
             return result.success;
@@ -130,11 +154,11 @@ function _installDependencies() {
             details: results,
             logs: logs
           });
-        case 30:
+        case 35:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[5, 22, 25, 28]]);
+    }, _callee, null, [[5, 27, 30, 33]]);
   }));
   return _installDependencies.apply(this, arguments);
 }

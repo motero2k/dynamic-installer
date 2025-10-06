@@ -67,8 +67,8 @@ installDependencies(options)
 ### Example Explanation
 
 - **`globalOptions`** are applied to all dependencies by default, unless explicitly overridden.
-- **`eslint`** installs using its own `--global` option and ignores `globalOptions`.
-- **`lodash`** combines `--no-save` with the global option `--save-dev` since `override` is set to `false`.
+- **`eslint`** installs using its own `--global` option combined with `globalOptions` since `override` is not set (defaults to `false`).
+- **`lodash`** installs using only `--no-save` (ignoring `globalOptions`) since `override` is set to `true`.
 - **`mocha`** defaults to using only the `globalOptions`.
 
 ### Output
@@ -88,6 +88,7 @@ The function returns a Promise resolving to an object with:
     - **`name`** (String): Dependency name (required).
     - **`options`** (String): Specific options for this dependency (optional).
     - **`override`** (Boolean): Set to `true` to use only dependency-specific options, ignoring `globalOptions`. Defaults to `false`.
+  - **`verbose`** (Boolean): Enable detailed logging to the console. Defaults to `true`.
 
 Returns: A Promise resolving to an object with `success` and `details`.
 
