@@ -8,9 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Planned future work will be displayed here.
 
-## [1.1.2] - 2024-11-12
+## [2.0.0] - 2025-10-07
 
-- **Security Update**: fix error detection, add input validation, make verbose configurable, fix override default
+- **Security Update**: fix error detection, add input validation, make verbose configurable, fix override default. Now globalOptions and depencencies.options must be arrays of strings.
 
 ## [1.1.1] - 2024-11-10
 

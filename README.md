@@ -60,8 +60,9 @@ The `installDependencies` function accepts a configuration object containing glo
 ```javascript
 const options = {
   globalOptions: ['--save-dev'],
+  verbose: true,
   dependencies: [
-    { name: 'eslint', options: ['--global'] },
+    { name: 'eslint', options: ['--ignore-scripts'] },
     { name: 'lodash', options: ['--no-save'], override: true },
     { name: 'mocha' }
   ]
@@ -89,7 +90,7 @@ installDependencies(options)
 ### Example Explanation
 
 - **`globalOptions`** are applied to all dependencies by default, unless explicitly overridden.
-- **`eslint`** installs using its own `--global` option combined with `globalOptions` since `override` is not set (defaults to `false`).
+- **`eslint`** installs using its own `--ignore-scripts` option combined with `globalOptions` since `override` is not set (defaults to `false`).
 - **`lodash`** installs using only `--no-save` (ignoring `globalOptions`) since `override` is set to `true`.
 - **`mocha`** defaults to using only the `globalOptions`.
 
